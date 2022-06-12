@@ -3,10 +3,10 @@ import java.util.function.Consumer;
 
 public class ArrayQueueIterator<E> implements Iterator<E> {
 
-    private int front;
-    private int size;
+    private final int front;
+    private final int size;
     private int index = 0;
-    private E[] elements;
+    private final E[] elements;
 
     public ArrayQueueIterator(E[] elements, int front, int size) {
         this.front = front;
