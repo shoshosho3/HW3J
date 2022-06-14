@@ -15,12 +15,16 @@ public class ToDoList implements Cloneable, TaskIterable {
     }
 
     public void addTask(Task task) {
-        if (hasTask(task)) throw new TaskAlreadyExistsException();
-        if (scanningDate != null && task.getDueDate().before(scanningDate))
-            task.getDueDate().setTime(scanningDate.getTime());
+        if (hasTaskDescription(task)) throw new TaskAlreadyExistsException();
         tasks.add(task);
     }
 
+    private boolean hasTaskDescription(Task task) {
+        for (Task taskIn : tasks) {
+            if (taskIn.getDescription().equals(task.getDescription())) return true;
+        }
+        return false;
+    }
     private boolean hasTask(Task task) {
         for (Task taskIn : tasks) {
             if (taskIn.equals(task)) return true;
@@ -32,8 +36,9 @@ public class ToDoList implements Cloneable, TaskIterable {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[");
         for (Task task : tasks) {
+            stringBuilder.append("(");
             stringBuilder.append(task.toString());
-            stringBuilder.append(", ");
+            stringBuilder.append("), ");
         }
         stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         stringBuilder.append("]");
@@ -63,7 +68,7 @@ public class ToDoList implements Cloneable, TaskIterable {
         ToDoList toDoList = (ToDoList) obj;
         if (toDoList.tasks.size() != this.tasks.size()) return false;
         for (int i = 0; i < tasks.size(); i++) {
-            if (!toDoList.tasks.get(i).equals(this.tasks.get(i))) return false;
+            if (!toDoList.hasTask(this.tasks.get(i))) return false;
         }
         return true;
     }
@@ -80,6 +85,6 @@ public class ToDoList implements Cloneable, TaskIterable {
 
     @Override
     public Iterator<Task> iterator() {
-        return new ToDoListIterator(this);
+        return new ToDoListIterator(this, scanningDate);
     }
 }

@@ -12,6 +12,10 @@ public class Task implements Cloneable {
         this.dueDate = dueDate;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public Date getDueDate() {
         return dueDate;
     }
@@ -24,7 +28,7 @@ public class Task implements Cloneable {
     public String toString() {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String strDate = dateFormat.format(dueDate);
-        return "(" + description + ", " + strDate + ")";
+        return description + ", " + strDate;
     }
 
     @Override
