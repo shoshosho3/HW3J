@@ -12,22 +12,30 @@ public class Task implements Cloneable {
         this.dueDate = dueDate;
     }
 
+    public Date getDueDate() {
+        return dueDate;
+    }
+
     void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
+        this.dueDate.setTime(dueDate.getTime());
     }
 
     @Override
     public String toString() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String strDate = dateFormat.format(dueDate);
         return "(" + description + ", " + strDate + ")";
     }
 
     @Override
-    protected Task clone() throws CloneNotSupportedException {
-        Task task = (Task) super.clone();
-        task.setDueDate((Date) dueDate.clone());
-        return task;
+    protected Task clone(){
+        try {
+            Task task = (Task) super.clone();
+            task.dueDate = new Date(getDueDate().getTime());
+            return task;
+        } catch (CloneNotSupportedException exception) {
+            return null;
+        }
     }
 
     @Override

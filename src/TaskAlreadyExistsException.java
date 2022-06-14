@@ -1,2 +1,2 @@
-public class TaskAlreadyExistsException extends Exception{
+public class TaskAlreadyExistsException extends RuntimeException{
 }

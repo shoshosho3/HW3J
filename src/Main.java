@@ -144,7 +144,7 @@ public class Main {
     /**
      * Tests for part B.
      */
-    private static void testPartB() throws CloneNotSupportedException {
+    private static void testPartB() {
         ToDoList l1 = new ToDoList();
         for (Task t : l1) {
             System.out.println("You should not reach here!");

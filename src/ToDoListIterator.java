@@ -1,5 +1,4 @@
 import java.util.Iterator;
-import java.util.Objects;
 
 public class ToDoListIterator implements Iterator<Task>{
 
@@ -13,7 +12,7 @@ public class ToDoListIterator implements Iterator<Task>{
 
     @Override
     public boolean hasNext() {
-        return index < toDoList.getTasks().size();
+        return index < toDoList.getTasks().size() - 1;
     }
 
     @Override

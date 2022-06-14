@@ -2,9 +2,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-public class ToDoList implements Cloneable, TaskIterable{
+public class ToDoList implements Cloneable, TaskIterable {
 
-    private final ArrayList<Task> tasks = new ArrayList<>();
+    private ArrayList<Task> tasks = new ArrayList<>();
+    private Date scanningDate = null;
 
     public ToDoList() {
     }
@@ -13,13 +14,15 @@ public class ToDoList implements Cloneable, TaskIterable{
         return tasks;
     }
 
-    public void addTask(Task task) throws TaskAlreadyExistsException {
-        if(hasTask(task)) throw new TaskAlreadyExistsException();
+    public void addTask(Task task) {
+        if (hasTask(task)) throw new TaskAlreadyExistsException();
+        if (scanningDate != null && task.getDueDate().before(scanningDate))
+            task.getDueDate().setTime(scanningDate.getTime());
         tasks.add(task);
     }
 
     private boolean hasTask(Task task) {
-        for(Task taskIn: tasks) {
+        for (Task taskIn : tasks) {
             if (taskIn.equals(task)) return true;
         }
         return false;
@@ -28,32 +31,39 @@ public class ToDoList implements Cloneable, TaskIterable{
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[");
-        for(Task task: tasks) {
+        for (Task task : tasks) {
             stringBuilder.append(task.toString());
+            stringBuilder.append(", ");
         }
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         stringBuilder.append("]");
         return stringBuilder.toString();
     }
 
     @Override
-    protected ToDoList clone() throws CloneNotSupportedException {
-        ToDoList newList = (ToDoList) super.clone();
-        ArrayList<Task> arrayList = newList.getTasks();
-        for(int i = 0; i < tasks.size(); i++) {
-            arrayList.set(i, tasks.get(i).clone());
+    protected ToDoList clone() {
+        try {
+            ToDoList newList = (ToDoList) super.clone();
+            ArrayList<Task> newTasks = new ArrayList<>();
+            for (Task task : tasks) {
+                newTasks.add(task.clone());
+            }
+            newList.tasks = newTasks;
+            return newList;
+        } catch (CloneNotSupportedException exception) {
+            return null;
         }
-        return newList;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == this) return true;
-        if(obj == null) return false;
-        if(obj.getClass() != getClass()) return false;
+        if (obj == this) return true;
+        if (obj == null) return false;
+        if (obj.getClass() != getClass()) return false;
         ToDoList toDoList = (ToDoList) obj;
-        if(toDoList.tasks.size() != this.tasks.size()) return false;
-        for(int i = 0; i < tasks.size(); i++) {
-            if(!toDoList.tasks.get(i).equals(this.tasks.get(i))) return false;
+        if (toDoList.tasks.size() != this.tasks.size()) return false;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (!toDoList.tasks.get(i).equals(this.tasks.get(i))) return false;
         }
         return true;
     }
@@ -65,7 +75,7 @@ public class ToDoList implements Cloneable, TaskIterable{
 
     @Override
     public void setScanningDueDate(Date date) {
-
+        scanningDate = date;
     }
 
     @Override
