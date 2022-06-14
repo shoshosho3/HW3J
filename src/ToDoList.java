@@ -6,6 +6,9 @@ public class ToDoList implements Cloneable, TaskIterable{
 
     private final ArrayList<Task> tasks = new ArrayList<>();
 
+    public ToDoList() {
+    }
+
     public ArrayList<Task> getTasks() {
         return tasks;
     }
@@ -44,12 +47,20 @@ public class ToDoList implements Cloneable, TaskIterable{
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if(obj == this) return true;
+        if(obj == null) return false;
+        if(obj.getClass() != getClass()) return false;
+        ToDoList toDoList = (ToDoList) obj;
+        if(toDoList.tasks.size() != this.tasks.size()) return false;
+        for(int i = 0; i < tasks.size(); i++) {
+            if(!toDoList.tasks.get(i).equals(this.tasks.get(i))) return false;
+        }
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return toString().hashCode();
     }
 
     @Override
@@ -59,6 +70,6 @@ public class ToDoList implements Cloneable, TaskIterable{
 
     @Override
     public Iterator<Task> iterator() {
-        return null;
+        return new ToDoListIterator(this);
     }
 }

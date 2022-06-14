@@ -1,3 +1,5 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Task implements Cloneable {
@@ -16,16 +18,21 @@ public class Task implements Cloneable {
 
     @Override
     public String toString() {
-        return "(" + description + ", " + dueDate.getDay() + '.' + dueDate.getMonth() + '.' + dueDate.getYear() + ")";
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = dateFormat.format(dueDate);
+        return "(" + description + ", " + strDate + ")";
     }
 
     @Override
-    protected Task clone() {
-        return new Task(description, (Date) dueDate.clone());
+    protected Task clone() throws CloneNotSupportedException {
+        Task task = (Task) super.clone();
+        task.setDueDate((Date) dueDate.clone());
+        return task;
     }
 
     @Override
     public boolean equals(Object obj) {
+        if(obj == this) return true;
         if (obj == null) return false;
         if (obj.getClass() != this.getClass()) return false;
         Task task = (Task) obj;
@@ -34,6 +41,6 @@ public class Task implements Cloneable {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return toString().hashCode();
     }
 }
