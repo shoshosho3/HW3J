@@ -1,5 +1,5 @@
 /**
  * This exception represents a queue exception
  */
-public class QueueException extends RuntimeException{
+public class QueueException extends RuntimeException {
 }

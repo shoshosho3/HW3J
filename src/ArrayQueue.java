@@ -7,12 +7,12 @@ import java.util.Iterator;
  * @param <E> class of items in queue
  */
 public class ArrayQueue<E extends Cloneable> implements Queue<E> {
-    private E[] elements;
-    private final int cap;
-    private int front = 0;
-    private int rear = 0;
-    private int frontLoops = 0;
-    private int rearLoops = 0;
+    private E[] elements; // Elements in queue
+    private final int cap; // max number of elements in queue
+    private int front = 0; // index of top of queue
+    private int rear = 0; // index of bottom of queue
+    private int frontLoops = 0; // number of times front moved from end of array to its start
+    private int rearLoops = 0; // number of times rear moved from end of array to its start
 
     /**
      * constructor
