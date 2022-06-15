@@ -7,7 +7,7 @@ import java.util.Iterator;
  * @param <E> class of items in queue
  */
 public class ArrayQueue<E extends Cloneable> implements Queue<E> {
-    private final E[] elements;
+    private E[] elements;
     private final int cap;
     private int front = 0;
     private int rear = 0;
@@ -32,11 +32,11 @@ public class ArrayQueue<E extends Cloneable> implements Queue<E> {
      *
      * @param element Cloneable element being inserted into queue
      */
-    public void enqueue(Cloneable element) {
+    public void enqueue(E element) {
         if (size() == cap) {
             throw new QueueOverflowException();
         }
-        this.elements[rear] = (E) element;
+        this.elements[rear] = element;
         if (rear == cap - 1) rearLoops++;
         rear = (rear + 1) % cap;
     }
@@ -93,15 +93,12 @@ public class ArrayQueue<E extends Cloneable> implements Queue<E> {
     @Override
     public ArrayQueue<E> clone() {
         try {
-            super.clone();
-            ArrayQueue<E> arrayQueue = new ArrayQueue<>(cap);
-            for (Object element : this) {
-                if (element == null) {
-                    continue;
-                }
-
-                Method method = element.getClass().getMethod("clone");
-                arrayQueue.enqueue((Cloneable) (method.invoke(element)));
+            ArrayQueue<E> arrayQueue = (ArrayQueue<E>) super.clone();
+            arrayQueue.elements = arrayQueue.elements.clone();
+            for (int i = 0; i < arrayQueue.elements.length; i++) {
+                if (arrayQueue.elements[i] == null) continue;
+                Method method = arrayQueue.elements[i].getClass().getMethod("clone");
+                arrayQueue.elements[i] = ((E) method.invoke(arrayQueue.elements[i]));
             }
             return arrayQueue;
         } catch (Exception e) {
